@@ -1,18 +1,28 @@
 "use client";
+import { handleModal } from "@/store/slices/modalSlice";
 import HeaderWithText from "../common/Header/HeaderWithText";
+import CustomModal from "../common/Modal/CustomModal";
 import { CustomTable } from "../common/Table/CustomTable";
+import { useDispatch } from "react-redux";
 
 const UploadPage = () => {
+  const dispatch = useDispatch();
   const handleDelete = (id) => {
     console.log("Delete", id);
   };
 
   const handleEdit = (record) => {
     console.log("Edit", record);
+    dispatch(handleModal({ open: true, editData: record }));
   };
   return (
     <section className="py-5">
-      <HeaderWithText label="Upload" />
+      <HeaderWithText
+        label="Upload"
+        onclick={() => {
+          dispatch(handleModal({ open: true }));
+        }}
+      />
       <CustomTable
         data={{
           data: [
@@ -29,6 +39,20 @@ const UploadPage = () => {
         onEdit={handleEdit}
         hiddenColumns={["_id"]}
       />
+      <CustomModal
+        title="Upload File"
+        width={600}
+        onclose={() => {
+          dispatch(handleModal({ open: false }));
+        }}
+      >
+        <h1>testing</h1>
+        {/* <CustomForm
+          formData={formData}
+          onSubmit={onFormSubmit}
+          loading={AddNewsCategoryLoading || UpdateLoading}
+        /> */}
+      </CustomModal>
     </section>
   );
 };
