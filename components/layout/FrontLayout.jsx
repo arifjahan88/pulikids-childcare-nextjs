@@ -1,5 +1,8 @@
+"use client";
+import { store } from "@/store/store";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { SignedIn, SignedOut, SignIn, UserButton } from "@clerk/nextjs";
+import { Provider } from "react-redux";
 
 const FrontLayout = ({ children }) => {
   return (
@@ -15,7 +18,7 @@ const FrontLayout = ({ children }) => {
           <h1 className="font-bold text-xl text-teal-700">Pulikids Childcare</h1>
           <UserButton showName />
         </header>
-        {children}
+        <Provider store={store}>{children}</Provider>
       </SignedIn>
     </AntdRegistry>
   );
