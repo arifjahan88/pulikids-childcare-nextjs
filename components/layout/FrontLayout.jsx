@@ -8,17 +8,19 @@ const FrontLayout = ({ children }) => {
   return (
     <AntdRegistry>
       <SignedOut>
-        <main className="min-h-screen flex justify-center items-center">
+        <section className="min-h-screen flex justify-center items-center">
           <SignIn routing="hash" />
-        </main>
+        </section>
       </SignedOut>
 
       <SignedIn>
-        <header className="flex justify-between p-5 bg-orange-100">
-          <h1 className="font-bold text-xl text-teal-700">Pulikids Childcare</h1>
+        <header className="flex justify-between p-5 shadow-sm border-b">
+          <h1 className="font-bold text-xl text-primary">Pulikids Childcare</h1>
           <UserButton showName />
         </header>
-        <Provider store={store}>{children}</Provider>
+        <Provider store={store}>
+          <main className="container">{children}</main>
+        </Provider>
       </SignedIn>
     </AntdRegistry>
   );

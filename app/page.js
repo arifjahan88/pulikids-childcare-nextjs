@@ -1,7 +1,9 @@
+import UploadPage from "@/components/Pages/UploadPage";
+
 export default function Home() {
   return (
     <>
-      <h1>Project running</h1>
+      <UploadPage />
     </>
   );
 }
