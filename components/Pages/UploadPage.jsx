@@ -6,10 +6,14 @@ import { CustomTable } from "../common/Table/CustomTable";
 import { useDispatch } from "react-redux";
 import CustomForm from "../common/Form/CustomForm";
 import { UploadFormData } from "../common/Form/FormData";
+import { useUploadFileMutation } from "@/store/api/endpoints/upload";
 
 const UploadPage = () => {
   const dispatch = useDispatch();
   const formData = UploadFormData();
+
+  //Api call
+  const [uploadFile] = useUploadFileMutation();
 
   const handleDelete = (id) => {
     console.log("Delete", id);
@@ -20,7 +24,8 @@ const UploadPage = () => {
     dispatch(handleModal({ open: true, editData: record }));
   };
 
-  const onFormSubmit = (data) => {
+  const onFormSubmit = async (data) => {
+    await uploadFile(data);
     console.log(data);
   };
   return (

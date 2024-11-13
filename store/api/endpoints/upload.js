@@ -1,7 +1,15 @@
-import baseApi from "../../baseApi";
+import baseApi from "../baseApi";
 
 export const uploadApi = baseApi.injectEndpoints({
-  endpoints: (builder) => ({}),
+  endpoints: (builder) => ({
+    uploadFile: builder.mutation({
+      query: (data) => ({
+        url: "/upload",
+        method: "POST",
+        body: data,
+      }),
+    }),
+  }),
 });
 
-export const {} = uploadApi;
+export const { useUploadFileMutation } = uploadApi;

@@ -36,7 +36,7 @@ export const CustomTable = ({
         showHeader={AllData?.data?.length > 0}
         loading={loading}
         dataSource={AllData?.data}
-        rowKey={(record) => record?.id}
+        rowKey={(record) => record?._id}
         onChange={(pagination) => {
           dispatch(setCurrentPage(pagination?.current));
           dispatch(setItemsPerPage(pagination?.pageSize));
