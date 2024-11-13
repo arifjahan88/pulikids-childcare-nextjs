@@ -4,9 +4,13 @@ import HeaderWithText from "../common/Header/HeaderWithText";
 import CustomModal from "../common/Modal/CustomModal";
 import { CustomTable } from "../common/Table/CustomTable";
 import { useDispatch } from "react-redux";
+import CustomForm from "../common/Form/CustomForm";
+import { UploadFormData } from "../common/Form/FormData";
 
 const UploadPage = () => {
   const dispatch = useDispatch();
+  const formData = UploadFormData();
+
   const handleDelete = (id) => {
     console.log("Delete", id);
   };
@@ -14,6 +18,10 @@ const UploadPage = () => {
   const handleEdit = (record) => {
     console.log("Edit", record);
     dispatch(handleModal({ open: true, editData: record }));
+  };
+
+  const onFormSubmit = (data) => {
+    console.log(data);
   };
   return (
     <section className="py-5">
@@ -46,12 +54,7 @@ const UploadPage = () => {
           dispatch(handleModal({ open: false }));
         }}
       >
-        <h1>testing</h1>
-        {/* <CustomForm
-          formData={formData}
-          onSubmit={onFormSubmit}
-          loading={AddNewsCategoryLoading || UpdateLoading}
-        /> */}
+        <CustomForm formData={formData} onSubmit={onFormSubmit} loading={false} />
       </CustomModal>
     </section>
   );
