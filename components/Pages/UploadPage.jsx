@@ -6,7 +6,11 @@ import { CustomTable } from "../common/Table/CustomTable";
 import { useDispatch } from "react-redux";
 import CustomForm from "../common/Form/CustomForm";
 import { UploadFormData } from "../common/Form/FormData";
-import { useGetFilesQuery, useUploadFileMutation } from "@/store/api/endpoints/upload";
+import {
+  useDeleteFileMutation,
+  useGetFilesQuery,
+  useUploadFileMutation,
+} from "@/store/api/endpoints/upload";
 import { SuccessNotification } from "@/hooks/useNotification";
 
 const UploadPage = () => {
@@ -16,9 +20,13 @@ const UploadPage = () => {
   //Api call
   const [uploadFile, { isLoading: UploadLoading }] = useUploadFileMutation();
   const { data: AllData, isLoading: GetDataLoading } = useGetFilesQuery();
+  const [DeleteFile] = useDeleteFileMutation();
 
-  const handleDelete = (id) => {
-    console.log("Delete", id);
+  const handleDelete = async (id) => {
+    const res = await DeleteFile(id);
+    if (res?.data?.success) {
+      SuccessNotification(res?.data?.message);
+    }
   };
 
   const handleEdit = (record) => {

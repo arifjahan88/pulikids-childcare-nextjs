@@ -18,7 +18,7 @@ export const TableActions = ({ record, onEdit, onDelete, actions }) => {
         <Popconfirm
           title="Delete"
           description="Are you sure you want to delete this record?"
-          onConfirm={() => onDelete(record.id)}
+          onConfirm={() => onDelete(record._id)}
           okText="Delete"
           icon={<QuestionCircleOutlined style={{ color: "red" }} />}
         >

@@ -1,4 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
+import { sendResponse } from "@/lib/sendResponse";
 import FileUpload from "@/models/uploadModel";
 import { put } from "@vercel/blob";
 
@@ -11,7 +12,7 @@ export async function POST(request) {
     const upload_file = formData.get("upload_file");
 
     if (!title || !upload_file) {
-      throw new Error("Please fill all the fields");
+      return sendResponse(400, "Please fill all the fields");
     }
 
     const blobData = await put(title, upload_file, {
@@ -19,7 +20,7 @@ export async function POST(request) {
     });
 
     if (!blobData) {
-      throw new Error("File not uploaded to blob storage");
+      return sendResponse(500, "File not uploaded to blob storage");
     }
 
     const fileUploadData = await FileUpload.create({
@@ -28,21 +29,12 @@ export async function POST(request) {
     });
 
     if (!fileUploadData) {
-      throw new Error("File not uploaded to database");
+      return sendResponse(500, "File not uploaded to database");
     }
 
-    return Response.json({
-      message: "File uploaded successfully",
-      success: true,
-      status: 200,
-      data: fileUploadData,
-    });
+    return sendResponse(true, 200, "File uploaded successfully", fileUploadData);
   } catch (error) {
-    return Response.json({
-      data: error?.message || "An error occurred",
-      status: 500,
-      success: false,
-    });
+    return sendResponse(500, error?.message || "An error occurred");
   }
 }
 
@@ -53,17 +45,8 @@ export async function GET() {
 
     const files = await FileUpload.find({}).sort({ createdAt: -1 }).select("-__v");
 
-    return Response.json({
-      message: "Files fetched successfully",
-      status: 200,
-      success: true,
-      data: files,
-    });
+    return sendResponse(true, 200, "Files fetched successfully", files);
   } catch (error) {
-    return Response.json({
-      success: false,
-      message: error?.message || "An error occurred",
-      status: 500,
-    });
+    return sendResponse(500, error?.message || "An error occurred");
   }
 }
