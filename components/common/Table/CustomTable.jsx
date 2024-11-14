@@ -1,7 +1,7 @@
-import { Table as AntTable, Button } from "antd";
+import { Table as AntTable, Button, Flex } from "antd";
 import { TableHeader } from "./TableHeader";
 import { useDispatch } from "react-redux";
-import { setCurrentPage, setItemsPerPage, setSearchQuery } from "@/store/slices/paginationSlice";
+import { setSearchQuery } from "@/store/slices/paginationSlice";
 import { TableActions } from "./TableActions";
 
 const { Column } = AntTable;
@@ -14,7 +14,7 @@ export const CustomTable = ({
   hiddenColumns = [],
   actions = { edit: true, delete: true },
   searchable = true,
-  pagination = { enabled: true },
+  pagination = { enabled: false },
 }) => {
   const allHiddenColumns = [...hiddenColumns];
   const dispatch = useDispatch();
@@ -37,10 +37,7 @@ export const CustomTable = ({
         loading={loading}
         dataSource={AllData?.data}
         rowKey={(record) => record?._id}
-        onChange={(pagination) => {
-          dispatch(setCurrentPage(pagination?.current));
-          dispatch(setItemsPerPage(pagination?.pageSize));
-        }}
+        pagination={pagination.enabled}
         scroll={{ x: "max-content" }}
       >
         <Column title="SL" key="sl" width={50} render={(_, __, index) => index + 1} />
@@ -52,14 +49,23 @@ export const CustomTable = ({
             <Column
               key={key}
               dataIndex={key}
-              title={key}
+              title={key[0].toUpperCase() + key.slice(1)}
               width={150}
               render={(value) => {
                 if (key === "url") {
                   return (
-                    <Button type="primary" onClick={() => window.open(value)}>
-                      View File
-                    </Button>
+                    <Flex align="center" gap={5}>
+                      <Button type="primary" onClick={() => window.open(value)}>
+                        View File
+                      </Button>
+                      <Button
+                        type="primary"
+                        danger
+                        onClick={() => window.open(value + "?download=1")}
+                      >
+                        Download File
+                      </Button>
+                    </Flex>
                   );
                 }
 

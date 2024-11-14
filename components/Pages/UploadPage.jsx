@@ -9,6 +9,7 @@ import { UploadFormData } from "../common/Form/FormData";
 import {
   useDeleteFileMutation,
   useGetFilesQuery,
+  useUpdateFileMutation,
   useUploadFileMutation,
 } from "@/store/api/endpoints/upload";
 import { SuccessNotification } from "@/hooks/useNotification";
@@ -19,8 +20,9 @@ const UploadPage = () => {
 
   //Api call
   const [uploadFile, { isLoading: UploadLoading }] = useUploadFileMutation();
-  const { data: AllData, isLoading: GetDataLoading } = useGetFilesQuery();
+  const { data: AllData, isFetching: GetDataLoading } = useGetFilesQuery();
   const [DeleteFile] = useDeleteFileMutation();
+  const [UpdateFile, { isLoading: UpdateLoading }] = useUpdateFileMutation();
 
   const handleDelete = async (id) => {
     const res = await DeleteFile(id);
@@ -30,18 +32,23 @@ const UploadPage = () => {
   };
 
   const handleEdit = (record) => {
-    console.log("Edit", record);
     dispatch(handleModal({ open: true, editData: record }));
   };
 
   const onFormSubmit = async (data) => {
     const sendData = new FormData();
     sendData.append("title", data.title);
-    sendData.append("upload_file", data.upload_file);
+    data.upload_file && sendData.append("upload_file", data.upload_file);
 
-    const res = await uploadFile(sendData);
-    if (res?.data?.success) {
-      SuccessNotification(res?.data?.message);
+    const apiCall = data?._id
+      ? await UpdateFile({
+          id: data?._id,
+          data: sendData,
+        })
+      : await uploadFile(sendData);
+
+    if (apiCall?.data?.success) {
+      SuccessNotification(apiCall?.data?.message);
       dispatch(handleModal({ open: false }));
     }
   };
@@ -67,7 +74,11 @@ const UploadPage = () => {
           dispatch(handleModal({ open: false }));
         }}
       >
-        <CustomForm formData={formData} onSubmit={onFormSubmit} loading={UploadLoading} />
+        <CustomForm
+          formData={formData}
+          onSubmit={onFormSubmit}
+          loading={UploadLoading || UpdateLoading}
+        />
       </CustomModal>
     </section>
   );

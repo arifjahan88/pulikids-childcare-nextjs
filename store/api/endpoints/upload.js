@@ -19,6 +19,15 @@ export const uploadApi = baseApi.injectEndpoints({
       providesTags: ["upload"],
     }),
 
+    updateFile: builder.mutation({
+      query: ({ data, id }) => ({
+        url: `/upload/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["upload"],
+    }),
+
     deleteFile: builder.mutation({
       query: (id) => ({
         url: `/upload/${id}`,
@@ -29,4 +38,9 @@ export const uploadApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useUploadFileMutation, useGetFilesQuery, useDeleteFileMutation } = uploadApi;
+export const {
+  useUploadFileMutation,
+  useGetFilesQuery,
+  useDeleteFileMutation,
+  useUpdateFileMutation,
+} = uploadApi;

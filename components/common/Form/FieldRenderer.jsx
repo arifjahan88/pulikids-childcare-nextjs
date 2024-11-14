@@ -1,6 +1,6 @@
-import { Input, Upload } from "antd";
+import { Input, message, Upload } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
-import { ErrorNotification, SuccessNotification } from "@/hooks/useNotification";
+import { ErrorNotification } from "@/hooks/useNotification";
 
 const { Dragger } = Upload;
 
@@ -29,7 +29,7 @@ const FieldRenderer = ({ field, data, setValue }) => {
     onChange(info) {
       const { status } = info.file;
       if (status === "done") {
-        SuccessNotification("File Uploaded Successfully");
+        message.success("File Uploaded");
       } else if (status === "error") {
         ErrorNotification(`${info.file.name} file upload failed.`);
       }

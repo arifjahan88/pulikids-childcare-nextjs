@@ -3,6 +3,7 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import baseApi from "./api/baseApi";
 import modalReducer from "./slices/modalSlice";
 import paginationReducer from "./slices/paginationSlice";
+import { errorLoggingMiddleware } from "./middleware";
 
 export const store = configureStore({
   reducer: {
@@ -10,7 +11,8 @@ export const store = configureStore({
     modal: modalReducer,
     pagination: paginationReducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(baseApi.middleware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(baseApi.middleware, errorLoggingMiddleware),
 });
 
 setupListeners(store.dispatch);
