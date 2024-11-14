@@ -8,8 +8,25 @@ export const uploadApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["upload"],
+    }),
+
+    getFiles: builder.query({
+      query: () => ({
+        url: "/upload",
+        method: "GET",
+      }),
+      providesTags: ["upload"],
+    }),
+
+    deleteFile: builder.mutation({
+      query: (id) => ({
+        url: `/upload/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["upload"],
     }),
   }),
 });
 
-export const { useUploadFileMutation } = uploadApi;
+export const { useUploadFileMutation, useGetFilesQuery, useDeleteFileMutation } = uploadApi;

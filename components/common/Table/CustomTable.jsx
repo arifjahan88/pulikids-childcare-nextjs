@@ -1,4 +1,4 @@
-import { Table as AntTable } from "antd";
+import { Table as AntTable, Button } from "antd";
 import { TableHeader } from "./TableHeader";
 import { useDispatch } from "react-redux";
 import { setCurrentPage, setItemsPerPage, setSearchQuery } from "@/store/slices/paginationSlice";
@@ -55,6 +55,14 @@ export const CustomTable = ({
               title={key}
               width={150}
               render={(value) => {
+                if (key === "url") {
+                  return (
+                    <Button type="primary" onClick={() => window.open(value)}>
+                      View File
+                    </Button>
+                  );
+                }
+
                 return value;
               }}
             />
