@@ -1,15 +1,28 @@
 import { Input, message, Upload } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import { ErrorNotification } from "@/hooks/useNotification";
+import { selectModal } from "@/store/slices/modalSlice";
+import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
 
 const { Dragger } = Upload;
 
 const FieldRenderer = ({ field, data, setValue }) => {
   const acceptedFileTypes = ".pdf,.txt,.doc,.docx,.csv";
+  const { open } = useSelector(selectModal);
+  const [fileList, setFileList] = useState([]);
+
+  useEffect(() => {
+    if (!open) {
+      setFileList([]);
+    }
+  }, [open]);
+
   const props = {
     name: "file",
     multiple: false,
     accept: acceptedFileTypes,
+    fileList: fileList,
     beforeUpload: (file) => {
       const isLt2M = file.size / 1024 / 1024 < 2;
       const isValidFileType = acceptedFileTypes.includes(`.${file.name.split(".").pop()}`);
@@ -23,6 +36,7 @@ const FieldRenderer = ({ field, data, setValue }) => {
         ErrorNotification("File must smaller than 2MB!");
         return Upload.LIST_IGNORE;
       }
+      setFileList([file]);
       setValue(data.name, file);
       return true;
     },
@@ -35,7 +49,12 @@ const FieldRenderer = ({ field, data, setValue }) => {
       }
     },
     onDrop(e) {
+      setFileList([e.dataTransfer.files[0]]);
       setValue(data.name, e.dataTransfer.files[0]);
+    },
+    onRemove() {
+      setFileList([]);
+      setValue(data.name, null);
     },
   };
 

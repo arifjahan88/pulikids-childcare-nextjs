@@ -18,5 +18,5 @@ export const useFormSetup = ({ setValue, reset }) => {
     if (!open) {
       reset({});
     }
-  }, [open, reset]);
+  }, [open, reset, setValue]);
 };
